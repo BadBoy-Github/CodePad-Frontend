@@ -155,15 +155,46 @@ const App = () => {
       e.stopPropagation();
     }
 
-    // Handle Java - requires backend server
-    if (language === "java") {
-      setConsoleOutput(
-        `Note: Java execution requires a backend server with Java compiler.\n\n` +
-          `In a production environment, the Java code would be:\n1. Sent to a backend server\n2. Compiled using javac\n3. Executed using java\n4. Output returned to the frontend\n\n` +
-          `Currently, only JavaScript and Python are supported for client-side execution.`,
-      );
-      setIsError(false);
+    // Handle Java - send to backend server for compilation and execution
+    const handleJavaRun = async () => {
+      try {
+        setConsoleOutput("Compiling and running Java code...");
+        setIsTerminalOpen(true);
+        setIsError(false);
+
+        const response = await fetch("http://localhost:3001/execute/java", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ code }),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          setConsoleOutput(result.output);
+          setIsError(false);
+        } else {
+          setConsoleOutput(result.error || "Execution failed");
+          setIsError(true);
+        }
+      } catch (error) {
+        let errorMessage = "Failed to connect to backend server";
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        }
+        setConsoleOutput(
+          `Error: ${errorMessage}\n\nMake sure the backend server is running on http://localhost:3001`,
+        );
+        setIsError(true);
+      }
       setIsTerminalOpen(true);
+    };
+
+    // Handle Java - use backend server
+    if (language === "java") {
+      handleJavaRun();
       return;
     }
 
