@@ -1,13 +1,15 @@
+import { FaPlay } from "react-icons/fa";
+
 interface FooterProps {
   isTerminalOpen: boolean;
   setIsTerminalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  runtimeError: string | null;
+  consoleOutput: string | null;
 }
 
 const Footer = ({
   isTerminalOpen,
   setIsTerminalOpen,
-  runtimeError,
+  consoleOutput,
 }: FooterProps) => {
   return (
     <div className="w-full bg-teal-200 flex flex-col overflow-hidden rounded-t-xl">
@@ -17,16 +19,16 @@ const Footer = ({
           <h3 className="font-semibold mb-2 text-green-400">Terminal Output</h3>
           <pre className="text-sm font-mono">
             {`> Running code...
-${runtimeError || "Execution completed successfully"}`}
+${consoleOutput || "No output"}`}
           </pre>
         </div>
       )}
 
-      {/* Runtime Errors Section - always visible at bottom */}
+      {/* Console Status Bar - always visible at bottom */}
       <div className="h-10 bg-gray-800 flex items-center justify-between px-4">
-        <div className="flex items-center gap-2 text-red-400 text-sm">
-          <span className="font-semibold">Runtime Error:</span>
-          <span>{runtimeError || "No errors"}</span>
+        <div className="flex items-center gap-2 text-green-400 text-sm">
+          <FaPlay className="text-xs" />
+          <span>Terminal Ready</span>
         </div>
         <button
           onClick={() => setIsTerminalOpen(!isTerminalOpen)}

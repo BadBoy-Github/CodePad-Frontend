@@ -1,9 +1,10 @@
+import { FaPlay } from "react-icons/fa";
+
 interface HeaderProps {
-  onCompile: () => void;
-  onExecute: () => void;
+  onRun: () => void;
 }
 
-const Header = ({ onCompile, onExecute }: HeaderProps) => {
+const Header = ({ onRun }: HeaderProps) => {
   return (
     <div className=" w-full h-20 flex items-center justify-between">
       <div className="bg-teal-200 h-full flex items-center justify-between px-4 rounded-xl">
@@ -15,18 +16,14 @@ const Header = ({ onCompile, onExecute }: HeaderProps) => {
           <p className="text-teal-800 text-sm">code like pro</p>
         </div>
       </div>
-      <div className="bg-teal-200 w-96 h-full rounded-xl flex items-center justify-center gap-4 px-4">
+      <div className="bg-teal-200 w-40 h-full rounded-xl flex items-center justify-center px-4">
         <button
-          onClick={onCompile}
-          className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium"
+          type="button"
+          onClick={onRun}
+          className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium flex items-center gap-2"
         >
-          Compile
-        </button>
-        <button
-          onClick={onExecute}
-          className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium"
-        >
-          Execute
+          <FaPlay className="text-sm" />
+          <span>Run</span>
         </button>
       </div>
     </div>
