@@ -59,7 +59,6 @@ const MainBody = ({
         <Editor
           height="100%"
           language={language}
-          defaultValue="//Start writing your code here..."
           value={code}
           onChange={(value) => setCode(value || "")}
           onMount={handleEditorDidMount}

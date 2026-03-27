@@ -18,21 +18,43 @@ const Header = ({ onRun, language, onLanguageChange }: HeaderProps) => {
           <p className="text-teal-800 text-sm">code like pro</p>
         </div>
       </div>
-      <div className="bg-teal-200 h-full rounded-xl flex items-center justify-center px-4 gap-4">
-        {/* Language Dropdown */}
-        <label className="flex items-center gap-2">
-          <span className="text-teal-700 text-sm font-medium">Lang:</span>
-          <select
-            value={language}
-            onChange={(e) => onLanguageChange(e.target.value)}
-            className="px-3 py-2 bg-teal-50 text-teal-700 rounded-lg border border-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500 font-medium cursor-pointer"
-            aria-label="Select programming language"
+      <div className="bg-teal-200 h-full rounded-xl flex items-center justify-center px-4 gap-2">
+        {/* Language Toggle Buttons */}
+        <div className="flex gap-1">
+          <button
+            type="button"
+            onClick={() => onLanguageChange("javascript")}
+            className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+              language === "javascript"
+                ? "bg-teal-500 text-white"
+                : "bg-teal-100 text-teal-700 hover:bg-teal-200"
+            }`}
           >
-            <option value="javascript">JavaScript</option>
-            <option value="java">Java</option>
-            <option value="python">Python</option>
-          </select>
-        </label>
+            JS
+          </button>
+          <button
+            type="button"
+            onClick={() => onLanguageChange("python")}
+            className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+              language === "python"
+                ? "bg-teal-500 text-white"
+                : "bg-teal-100 text-teal-700 hover:bg-teal-200"
+            }`}
+          >
+            PY
+          </button>
+          <button
+            type="button"
+            onClick={() => onLanguageChange("java")}
+            className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+              language === "java"
+                ? "bg-teal-500 text-white"
+                : "bg-teal-100 text-teal-700 hover:bg-teal-200"
+            }`}
+          >
+            JV
+          </button>
+        </div>
         {/* Run Button */}
         <button
           type="button"
