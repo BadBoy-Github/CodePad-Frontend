@@ -7,7 +7,7 @@ interface HeaderProps {
 const Header = ({ onRun }: HeaderProps) => {
   return (
     <div className=" w-full h-20 flex items-center justify-between">
-      <div className="bg-teal-200 h-full flex items-center justify-between px-4 rounded-xl">
+      <div className="bg-teal-200 h-full flex items-center justify-between p-4 rounded-xl">
         <div className="w-14 h-14 bg-teal-100 rounded-full flex justify-center items-center">
           <img src="/logo.png" alt="CodePad" className="p-1" />
         </div>
@@ -20,7 +20,7 @@ const Header = ({ onRun }: HeaderProps) => {
         <button
           type="button"
           onClick={onRun}
-          className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium flex items-center gap-2"
+          className="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors font-medium flex items-center gap-2 cursor-pointer"
         >
           <FaPlay className="text-sm" />
           <span>Run</span>

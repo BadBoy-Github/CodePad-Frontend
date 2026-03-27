@@ -3,37 +3,23 @@ import { FaPlay } from "react-icons/fa";
 interface FooterProps {
   isTerminalOpen: boolean;
   setIsTerminalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  consoleOutput: string | null;
   isError: boolean;
 }
 
 const Footer = ({
   isTerminalOpen,
   setIsTerminalOpen,
-  consoleOutput,
   isError,
 }: FooterProps) => {
   return (
-    <div className="w-full bg-teal-200 flex flex-col overflow-hidden rounded-t-xl">
-      {/* Terminal Window - appears when up arrow is clicked, grows upwards */}
-      {isTerminalOpen && (
-        <div className="h-40 bg-gray-900 text-white p-4 overflow-auto border-b border-gray-700">
-          <h3
-            className={`font-semibold mb-2 ${isError ? "text-red-400" : "text-green-400"}`}
-          >
-            {isError ? "Error Output" : "Terminal Output"}
-          </h3>
-          <pre className="text-sm font-mono">
-            {`${consoleOutput || "No output"}`}
-          </pre>
-        </div>
-      )}
-
-      {/* Console Status Bar - always visible at bottom */}
-      <div className="h-10 bg-gray-800 flex items-center justify-between px-4">
-        <div className="flex items-center gap-2 text-green-400 text-sm">
+    <div className="w-full bg-teal-200 flex flex-col overflow-hidden rounded-t-xl h-10">
+      {/* Console Status Bar - always visible */}
+      <div className="h-10 bg-teal-800 flex items-center justify-between px-4">
+        <div
+          className={`flex items-center gap-2 text-sm ${isError ? "text-red-400" : "text-amber-400"}`}
+        >
           <FaPlay className="text-xs" />
-          <span>Terminal Ready</span>
+          <span>{isError ? "Error" : "Ready"}</span>
         </div>
         <button
           onClick={() => setIsTerminalOpen(!isTerminalOpen)}

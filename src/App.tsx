@@ -79,13 +79,20 @@ const App = () => {
   return (
     <div className=" px-10 pt-10 bg-teal-100 w-full h-screen flex flex-col">
       <Header onRun={handleRun} />
-      <MainBody code={code} setCode={setCode} />
-      <Footer
+      <MainBody
+        code={code}
+        setCode={setCode}
         isTerminalOpen={isTerminalOpen}
-        setIsTerminalOpen={setIsTerminalOpen}
         consoleOutput={consoleOutput}
         isError={isError}
       />
+      <div className="h-10">
+        <Footer
+          isTerminalOpen={isTerminalOpen}
+          setIsTerminalOpen={setIsTerminalOpen}
+          isError={isError}
+        />
+      </div>
     </div>
   );
 };
