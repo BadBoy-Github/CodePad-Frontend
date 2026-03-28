@@ -8,7 +8,7 @@ interface MainBodyProps {
   consoleOutput: string | null;
   isError: boolean;
   language: string;
-  onTerminalInput?: (input: string) => void;
+  onTerminalInput?: (input: string, fullLine: string) => void;
   showTerminalInput?: boolean;
   javaProcessId?: number | null;
 }
@@ -25,6 +25,7 @@ const MainBody = ({
   javaProcessId,
 }: MainBodyProps) => {
   const [inputValue, setInputValue] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
 
   const handleEditorDidMount = (_editor: unknown, monaco: unknown) => {
@@ -56,12 +57,27 @@ const MainBody = ({
     }
   }, [consoleOutput]);
 
+  // Focus input when showTerminalInput becomes true
+  useEffect(() => {
+    if (showTerminalInput && inputRef.current) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+    }
+  }, [showTerminalInput]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (inputValue.trim() && onTerminalInput) {
-      onTerminalInput(inputValue);
+      onTerminalInput(inputValue, inputValue);
       setInputValue("");
     }
+  };
+
+  // Display console output as-is
+  const displayOutput = () => {
+    if (!consoleOutput) return "";
+    return consoleOutput;
   };
 
   return (
@@ -80,19 +96,17 @@ const MainBody = ({
             {isError ? "Error Output" : "Terminal Output"}
           </span>
           {showTerminalInput && javaProcessId && (
-            <span className="text-xs text-green-400">
-              Running (ID: {javaProcessId})
-            </span>
+            <span className="text-xs text-green-400">Running</span>
           )}
         </div>
 
         {/* Terminal Output */}
         <div
           ref={terminalRef}
-          className="flex-1 p-3 overflow-auto font-mono text-sm text-white"
+          className="flex-1 p-3 overflow-auto font-mono text-sm"
         >
-          <pre className="whitespace-pre-wrap">
-            {consoleOutput || "No output"}
+          <pre className="whitespace-pre-wrap text-white">
+            {displayOutput()}
           </pre>
         </div>
 
@@ -100,15 +114,16 @@ const MainBody = ({
         {showTerminalInput && (
           <form
             onSubmit={handleSubmit}
-            className="flex items-center border-t border-gray-700 bg-teal-800 px-3 py-2"
+            className="flex items-center border-t border-gray-700 bg-teal-800 px-3 py-2 font-mono text-sm"
           >
             <span className="text-green-400 mr-2">{">"}</span>
             <input
+              ref={inputRef}
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Enter input and press Enter..."
-              className="flex-1 bg-transparent text-white outline-none text-sm font-mono"
+              placeholder="Enter your data here"
+              className="flex-1 bg-transparent text-white outline-none placeholder-gray-400"
               autoFocus
             />
           </form>

@@ -180,13 +180,13 @@ const App = () => {
 
         if (result.success) {
           setJavaProcessId(result.processId);
-          setConsoleOutput(result.output || "Waiting for input...\n");
+          // Show Java's output directly
+          setConsoleOutput(result.output);
           setIsError(false);
 
           // Check if already finished
           if (result.isFinished) {
             setJavaRunning(false);
-            setConsoleOutput(result.output + "\n\nProgram finished.");
           }
         } else {
           setConsoleOutput(result.error || "Execution failed");
@@ -282,7 +282,7 @@ const App = () => {
   };
 
   // Handle terminal input for interactive Java programs
-  const handleTerminalInput = async (input: string) => {
+  const handleTerminalInput = async (input: string, _fullLine: string) => {
     if (!javaProcessId || !javaRunning) return;
 
     try {
@@ -297,6 +297,7 @@ const App = () => {
       const result = await response.json();
 
       if (result.success) {
+        // Use Java's output directly - it already includes user input
         setConsoleOutput(
           result.output + (result.isFinished ? "\n\nProgram finished." : ""),
         );
@@ -313,7 +314,7 @@ const App = () => {
         setJavaRunning(false);
         setJavaProcessId(null);
       }
-    } catch (error) {
+    } catch (_error) {
       setConsoleOutput((prev) => prev + "\nError: Failed to send input");
       setIsError(true);
     }
