@@ -57,14 +57,14 @@ const MainBody = ({
     }
   }, [consoleOutput]);
 
-  // Focus input when showTerminalInput becomes true
+  // Focus input when showTerminalInput becomes true or when consoleOutput changes (after each input)
   useEffect(() => {
     if (showTerminalInput && inputRef.current) {
       setTimeout(() => {
         inputRef.current?.focus();
       }, 100);
     }
-  }, [showTerminalInput]);
+  }, [showTerminalInput, consoleOutput]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

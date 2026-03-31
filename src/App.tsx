@@ -306,6 +306,12 @@ const App = () => {
           result.output + (result.isFinished ? "\n\nProgram finished." : ""),
         );
 
+        console.log("Frontend - Input result:", {
+          requiresInput: result.requiresInput,
+          isFinished: result.isFinished,
+          outputLength: result.output.length,
+        });
+
         // Update requiresInput based on backend response
         setJavaRequiresInput(result.requiresInput === true);
 

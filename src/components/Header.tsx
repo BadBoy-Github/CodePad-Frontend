@@ -1,5 +1,9 @@
 import { FaPlay } from "react-icons/fa";
 
+// React icons
+import { CgBulb } from "react-icons/cg";
+import { TbBulbFilled } from "react-icons/tb";
+
 interface HeaderProps {
   onRun: () => void;
   language: string;
@@ -19,6 +23,10 @@ const Header = ({ onRun, language, onLanguageChange }: HeaderProps) => {
         </div>
       </div>
       <div className="bg-teal-200 h-full rounded-xl flex items-center justify-center px-4 gap-2">
+        {/* Theme toggle */}
+        <div className="h-10 w-10 bg-teal-500 mr-5 rounded-xl flex justify-center items-center p-2">
+          <TbBulbFilled className="text-amber-300" size={30}/>
+        </div>
         {/* Language Toggle Buttons */}
         <div className="flex gap-1">
           <button
