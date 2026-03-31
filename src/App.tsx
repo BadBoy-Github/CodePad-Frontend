@@ -27,6 +27,7 @@ const App = () => {
   const [javaProcessId, setJavaProcessId] = useState<number | null>(null);
   const [javaRunning, setJavaRunning] = useState(false);
   const [javaRequiresInput, setJavaRequiresInput] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
   // Initialize Pyodide on component mount
   useEffect(() => {
@@ -335,11 +336,15 @@ const App = () => {
   };
 
   return (
-    <div className=" px-10 pt-10 bg-teal-100 w-full h-screen flex flex-col">
+    <div
+      className={`px-10 pt-10 w-full h-screen flex flex-col ${darkMode ? "bg-zinc-900" : "bg-teal-100"}`}
+    >
       <Header
         onRun={handleRun}
         language={language}
         onLanguageChange={handleLanguageChange}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
       />
       <MainBody
         code={code}
@@ -351,12 +356,14 @@ const App = () => {
         onTerminalInput={handleTerminalInput}
         showTerminalInput={javaRequiresInput}
         javaProcessId={javaProcessId}
+        darkMode={darkMode}
       />
       <div className="h-10">
         <Footer
           isTerminalOpen={isTerminalOpen}
           setIsTerminalOpen={setIsTerminalOpen}
           isError={isError}
+          darkMode={darkMode}
         />
       </div>
     </div>

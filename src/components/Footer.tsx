@@ -4,17 +4,23 @@ interface FooterProps {
   isTerminalOpen: boolean;
   setIsTerminalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isError: boolean;
+  darkMode: boolean;
 }
 
 const Footer = ({
   isTerminalOpen,
   setIsTerminalOpen,
   isError,
+  darkMode,
 }: FooterProps) => {
   return (
-    <div className="w-full bg-teal-200 flex flex-col overflow-hidden rounded-t-xl h-10">
+    <div
+      className={`w-full flex flex-col overflow-hidden rounded-t-xl h-10 ${darkMode ? "bg-gradient-to-r from-zinc-800 to-zinc-700" : "bg-gradient-to-r from-teal-200 to-teal-100"}`}
+    >
       {/* Console Status Bar - always visible */}
-      <div className="h-10 bg-teal-800 flex items-center justify-between px-4">
+      <div
+        className={`h-10 flex items-center justify-between px-4 ${darkMode ? "bg-gradient-to-r from-zinc-900 to-zinc-800" : "bg-gradient-to-r from-teal-800 to-teal-700"}`}
+      >
         <div
           className={`flex items-center gap-2 text-sm ${isError ? "text-red-400" : "text-amber-400"}`}
         >

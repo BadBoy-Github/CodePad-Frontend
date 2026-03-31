@@ -11,6 +11,7 @@ interface MainBodyProps {
   onTerminalInput?: (input: string, fullLine: string) => void;
   showTerminalInput?: boolean;
   javaProcessId?: number | null;
+  darkMode: boolean;
 }
 
 const MainBody = ({
@@ -23,16 +24,20 @@ const MainBody = ({
   onTerminalInput,
   showTerminalInput = false,
   javaProcessId,
+  darkMode,
 }: MainBodyProps) => {
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
+  const monacoRef = useRef<unknown>(null);
 
   const handleEditorDidMount = (_editor: unknown, monaco: unknown) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const monacoEditor = monaco as any;
-    // Define custom theme
-    monacoEditor.editor.defineTheme("myCustomTheme", {
+    monacoRef.current = monacoEditor;
+
+    // Define light theme
+    monacoEditor.editor.defineTheme("myCustomThemeLight", {
       base: "vs",
       inherit: true,
       rules: [
@@ -46,9 +51,38 @@ const MainBody = ({
       },
     });
 
-    // Apply theme
-    monacoEditor.editor.setTheme("myCustomTheme");
+    // Define dark theme
+    monacoEditor.editor.defineTheme("myCustomThemeDark", {
+      base: "vs-dark",
+      inherit: true,
+      rules: [
+        { token: "comment", foreground: "009689", fontStyle: "italic" },
+        { token: "keyword", foreground: "FFA500", fontStyle: "bold" },
+      ],
+      colors: {
+        "editor.background": "#0f172a",
+        "editor.lineHighlightBackground": "#1e293b",
+        "editor.lineHighlightBorder": "#334155",
+        "editor.foreground": "#e2e8f0",
+      },
+    });
+
+    // Apply theme based on darkMode
+    monacoEditor.editor.setTheme(
+      darkMode ? "myCustomThemeDark" : "myCustomThemeLight",
+    );
   };
+
+  // Update theme when darkMode changes
+  useEffect(() => {
+    if (monacoRef.current) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const monacoEditor = monacoRef.current as any;
+      monacoEditor.editor.setTheme(
+        darkMode ? "myCustomThemeDark" : "myCustomThemeLight",
+      );
+    }
+  }, [darkMode]);
 
   // Auto-scroll terminal to bottom when output changes
   useEffect(() => {
@@ -81,15 +115,19 @@ const MainBody = ({
   };
 
   return (
-    <div className="bg-teal-200 w-full h-[calc(100vh-200px)] my-5 rounded-xl overflow-hidden flex flex-col relative">
+    <div
+      className={`w-full h-[calc(100vh-200px)] my-5 rounded-xl overflow-hidden flex flex-col relative border-2 ${darkMode ? "bg-zinc-800 border-zinc-600" : "bg-teal-200 border-teal-500"}`}
+    >
       {/* Terminal Window - overlays on top of editor */}
       <div
-        className={`absolute left-0 right-0 bottom-0 z-10 h-40 bg-teal-900 border-t border-gray-700 transition-all duration-300 ease-in-out flex flex-col ${
+        className={`absolute left-0 right-0 bottom-0 z-10 h-40 border-t border-gray-700 transition-all duration-300 ease-in-out flex flex-col ${
           isTerminalOpen ? "translate-y-0" : "translate-y-full"
-        }`}
+        } ${darkMode ? "bg-zinc-900" : "bg-teal-900"}`}
       >
         {/* Terminal Header */}
-        <div className="flex items-center justify-between px-3 py-1 bg-teal-800 border-b border-gray-700">
+        <div
+          className={`flex items-center justify-between px-3 py-1 border-b border-gray-700 ${darkMode ? "bg-zinc-800" : "bg-teal-800"}`}
+        >
           <span
             className={`text-sm font-semibold ${isError ? "text-red-400" : "text-amber-400"}`}
           >
@@ -114,7 +152,7 @@ const MainBody = ({
         {showTerminalInput && (
           <form
             onSubmit={handleSubmit}
-            className="flex items-center border-t border-gray-700 bg-teal-800 px-3 py-2 font-mono text-sm"
+            className={`flex items-center border-t border-gray-700 px-3 py-2 font-mono text-sm ${darkMode ? "bg-zinc-800" : "bg-teal-800"}`}
           >
             <span className="text-green-400 mr-2">{">"}</span>
             <input
@@ -130,15 +168,20 @@ const MainBody = ({
         )}
       </div>
 
-      <div className="flex-1 overflow-hidden">
-        <Editor
-          height="100%"
-          language={language}
-          value={code}
-          onChange={(value) => setCode(value || "")}
-          onMount={handleEditorDidMount}
-          className="py-2"
-        />
+      <div
+        className={`flex-1 overflow-hidden p-2 ${darkMode ? "bg-zinc-900" : "bg-teal-900"}`}
+      >
+        <div className="h-full rounded-lg overflow-hidden">
+          <Editor
+            height="100%"
+            language={language}
+            value={code}
+            onChange={(value) => setCode(value || "")}
+            onMount={handleEditorDidMount}
+            className="py-2"
+            theme={darkMode ? "myCustomThemeDark" : "myCustomThemeLight"}
+          />
+        </div>
       </div>
     </div>
   );
