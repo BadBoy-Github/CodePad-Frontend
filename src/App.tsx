@@ -168,7 +168,7 @@ const App = () => {
         setJavaRunning(true);
 
         const response = await fetch(
-          "http://localhost:3001/execute/java/start",
+          `${import.meta.env.VITE_BACKEND_URL}/execute/java/start`,
           {
             method: "POST",
             headers: {
@@ -204,7 +204,7 @@ const App = () => {
           errorMessage = error.message;
         }
         setConsoleOutput(
-          `Error: ${errorMessage}\n\nMake sure the backend server is running on http://localhost:3001`,
+          `Error: ${errorMessage}\n\nMake sure the backend server is running on ${import.meta.env.VITE_BACKEND_URL}`,
         );
         setIsError(true);
         setJavaRunning(false);
@@ -287,17 +287,20 @@ const App = () => {
   };
 
   // Handle terminal input for interactive Java programs
-  const handleTerminalInput = async (input: string, _fullLine: string) => {
+  const handleTerminalInput = async (input: string) => {
     if (!javaProcessId || !javaRunning) return;
 
     try {
-      const response = await fetch("http://localhost:3001/execute/java/input", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/execute/java/input`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ processId: javaProcessId, input }),
         },
-        body: JSON.stringify({ processId: javaProcessId, input }),
-      });
+      );
 
       const result = await response.json();
 
@@ -329,7 +332,8 @@ const App = () => {
         setJavaRunning(false);
         setJavaProcessId(null);
       }
-    } catch (_error) {
+    } catch (error) {
+      console.error("Failed to send input:", error);
       setConsoleOutput((prev) => prev + "\nError: Failed to send input");
       setIsError(true);
     }
