@@ -35,12 +35,12 @@ const App = () => {
       if (!window.loadPyodide) {
         // Load Pyodide script dynamically
         const script = document.createElement("script");
-        script.src = "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js";
+        script.src = "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pyodide.js";
         script.async = true;
         script.onload = async () => {
           try {
             const py = await window.loadPyodide({
-              indexURL: "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/",
+              indexURL: "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/",
             });
             setPyodide(py);
           } catch (err) {
